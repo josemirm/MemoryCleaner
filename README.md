@@ -6,6 +6,11 @@ It works allocating all non-used memory in the system to occupy all "pending" me
 ## Using the software:
 There are compiled binaries to use in 32-bit and 64-bit Windows machines in addition to the single C++ source file.
 It's about 50 lines of real code, it's simple but powerful.
+Download binaries here, and look inside of the repository to get the code.
+
+* Download 64-bit binary: [MemCleaner64.exe](https://github.com/josemicoronil/MemoryCleaner/raw/master/MemCleaner64.exe)
+
+* Download 32-bit binary: [MemCleaner32.exe](https://github.com/josemicoronil/MemoryCleaner/raw/master/MemCleaner32.exe)
 
 ## What happens on non-Windows machines:
 Their memory management works in a different way, so I don't think this software would be useful for you, but hey, you are free to try it out, it wouldn't do anything bad. I promise.

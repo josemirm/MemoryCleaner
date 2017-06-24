@@ -1,15 +1,15 @@
 # MemoryCleaner
 ## About this:
 This software have an easy way to free memory in Windows systems.
-It works allocating all non-used memory in the system to occupy all "pending" memory, after that, it frees all the allocated memory to let it completely free, not "half-free, half-pending-to-free".
+It works allocating all non-used memory in the system to occupy all "pending" memory, after that, it frees all the allocated memory to let it completely free, not "half-free, half-pending-to-free". If you haven't any virtual memory assigned to your system, you can use the infinite memory allocation; It wouldn't allocate more memory than you have. Otherwise, with a virtual memory file/partition, it will fill both physical and virtual memory making your computer totally unstable.
 
 ## Using the software:
-There are compiled binaries to use in 32-bit and 64-bit Windows machines in addition to the single C++ source file.
-It's about 50 lines of real code, it's simple but powerful.
-Download binaries here, and look inside of the repository to get the code.
+There are compiled binaries to use in 32-bit and 64-bit Windows machines in addition to the single ~~C++~~ C source file.
+It's about 100 lines of real code, it's simple but powerful.
+Here are binaries and code downloads:
 
+* Download source code: [MemCleaner.c](https://github.com/josemicoronil/MemoryCleaner/raw/master/MemCleaner.c)
 * Download 64-bit binary: [MemCleaner64.exe](https://github.com/josemicoronil/MemoryCleaner/raw/master/MemCleaner64.exe)
-
 * Download 32-bit binary: [MemCleaner32.exe](https://github.com/josemicoronil/MemoryCleaner/raw/master/MemCleaner32.exe)
 
 ## What happens on non-Windows machines:

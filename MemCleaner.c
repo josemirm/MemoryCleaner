@@ -39,6 +39,15 @@ void libera(unsigned long long memLiberarKB)
 	for (index = 0; index < memLiberarKB; index++)
 	{
 		ptr[index] = calloc(KB_TO_B, sizeof(char));
+
+		// Cuando no se puede reservar memoria el puntero devuelto es nulo. En
+		// dicho caso habrá que parar de reservar memoria y sólo se tendrá que
+		// liberar hasta el punto reservado, no más.
+		if ( !(ptr[index]) )
+		{
+			memLiberarKB = index;
+			break;
+		}
 	}
 
 	printf("Liberando memoria...\n");

@@ -1,7 +1,7 @@
-# MemoryCleaner
+# Josemi's Memory Cleaner
 ## About this:
 This software have an easy way to free memory in Windows systems.
-It works allocating all non-used memory in the system to occupy all "pending" memory, after that, it frees all the allocated memory to let it completely free, not "half-free, half-pending-to-free". The last version of the program check your physical free memory on your computer to do the cleaning automatically without any 
+This memory cleaner works allocating all non-used memory in the system to occupy all "pending" memory, after that, it frees all the allocated memory to let it completely free, not "half-free, half-pending-to-free". The last version of the program check your physical free memory on your computer to do the cleaning automatically without any 
 * TO THE OLD VERSION (NOT RECOMMENDED): If you haven't any virtual memory assigned to your system, you can use the infinite memory allocation (t wouldn't allocate more memory than you have), otherwise with a virtual memory file/partition, it will fill both physical and virtual memory making your computer totally unstable.
 
 ## Using the software:

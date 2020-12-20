@@ -1,59 +1,101 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include <Windows.h>
 
 #define KB_TO_B 1024
 
 unsigned long long getMem();
-void libera(unsigned long long memLiberarKB);
+void freeMem(unsigned long long memInKB);
+void printUsage(char **argv);
 
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
-	libera(getMem());
+	printf("Josemi's MemCleaner\n");
+
+	// To prevent OS malfunctioning, it will only clean the 90% of the memory
+	// available
+	unsigned long long avail = 10 * getMem() / 9;
+	unsigned long long memToClean;
+
+	if (argc == 2) {
+		if (argv[1][0] == '-') {
+			switch (argv[1][1]) {
+				case 'f':
+					break;
+				
+				case 'h':
+				default:
+					printUsage();
+			}		
+		} else {
+			memToClean = atoll(argv[1]);
+			if (memToClean == 0) {
+				printUsage();
+			}
+
+			if (memToClean > avail) {
+				freeMem(avail);
+			} else {
+				freeMem(memToClean);
+			}
+		}
+	} else {
+		printf("No options selected.\
+				90%% of the available memory will be cleaned\n");
+		freeMem(avail);
+	}
+
 	return 0;
 }	// int main()
 
-unsigned long long getMem()
-{
+void printUsage(char **argv) {
+	printf("Usage: %s <Mem. to free in KB>\
+			Use %s -h to show this help.
+			Use %s -f to get the free memory available.\n", argv[1], argv[1]);
+}	// void printUsage()
+
+unsigned long long getMem() {
 	unsigned long long phys;
 	MEMORYSTATUSEX mem;
+
 	mem.dwLength = sizeof(mem);
 	GlobalMemoryStatusEx(&mem);
-	printf("\nPorcentaje usado de la memoria: %ld%%\n", mem.dwMemoryLoad);
+	
+	printf("\nPhysical memory used (percentage): %ld%%\n", mem.dwMemoryLoad);
+	
 	phys = (mem.ullAvailPhys/KB_TO_B);
-	printf("Memoria fisica disponible: %I64d KB\n", phys);
+	printf("Physical memory available: %I64d KB\n", phys);
+	
 	return phys;
 }	// unsigned long long getMem()
 
-void libera(unsigned long long memLiberarKB)
+void freeMem(unsigned long long memInKB);
 {
 	void** ptr;
 	unsigned long long index;
-	//	Se libera sólo un 90% de la memoria total disponible.
-	///memLiberarKB = 0.9 * memLiberarKB;
-	printf(
-		"\nSe va a liberar un 100%% de dicha cantidad de memoria (%I64d KB)\n",
-		memLiberarKB);
-	printf("Ocupando memoria...\n");
-	ptr = calloc(memLiberarKB, sizeof(void*));
-	for (index = 0; index < memLiberarKB; index++)
-	{
+	
+	printf("\n%I64d KB of memory will be cleaned up\n", memInKB);
+	printf("Occupying  memory...\n");
+
+	ptr = calloc(memInKB, sizeof(void*));
+
+	for (index = 0; index < memInKB; index++) {
 		ptr[index] = calloc(KB_TO_B, sizeof(char));
 
-		// Cuando no se puede reservar memoria el puntero devuelto es nulo. En
-		// dicho caso habrá que parar de reservar memoria y sólo se tendrá que
-		// liberar hasta el punto reservado, no más.
-		if ( !(ptr[index]) )
-		{
-			memLiberarKB = index;
+		// When there isn't available memory, the pointer returned is null. In
+		// this case memory allocation must stop to start freeing memory.
+		if ( !(ptr[index]) ) {
+			memInKB = index;
 			break;
 		}
 	}
 
-	printf("Liberando memoria...\n");
-	for (index = 0; index < memLiberarKB; index++)
-	{
+	printf("Freeing memory...\n");
+
+	for (index = 0; index < memInKB; index++) {
 		free(ptr[index]);
 	}
+
 	free(ptr);
 }

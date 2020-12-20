@@ -9,9 +9,9 @@ There are compiled binaries to use in 32-bit and 64-bit Windows machines in addi
 It's ~~about 100~~ exactly 50 lines of code, it's simple but powerful.
 Here are binaries and code downloads:
 
-* Download source code: [MemCleaner.c](https://github.com/josemicoronil/MemoryCleaner/raw/master/MemCleaner.c)
-* Download 64-bit binary: [MemCleaner64.exe](https://github.com/josemicoronil/MemoryCleaner/raw/master/MemCleaner64.exe)
-* Download 32-bit binary: [MemCleaner32.exe](https://github.com/josemicoronil/MemoryCleaner/raw/master/MemCleaner32.exe)
+* Download source code: [MemCleaner.c](https://github.com/josemirm/MemoryCleaner/raw/master/MemCleaner.c)
+* Download 64-bit binary: [MemCleaner64.exe](https://github.com/josemirm/MemoryCleaner/raw/master/MemCleaner64.exe)
+* Download 32-bit binary: [MemCleaner32.exe](https://github.com/josemirm/MemoryCleaner/raw/master/MemCleaner32.exe)
 
 ## What happens on non-Windows machines:
 This program is completely targeted to Windows machines, in other OS the memory management works different and have diffent problems and solutions to the shown here.
@@ -22,7 +22,7 @@ To use on non-Windows machines you could use the older version at your own risk.
 
 MIT License
 
-Copyright (c) 2017 José Miguel (josemicoronil) Rodríguez
+Copyright (c) 2017 José Miguel (josemirm) Rodríguez
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

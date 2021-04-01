@@ -6,53 +6,68 @@
 #define KB_TO_B 1024
 
 unsigned long long getMem();
-void freeMem(unsigned long long memInKB);
+char freeMem(double fpMemInKB);
 void printUsage(char **argv);
 
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
+	char exitCode = -1;
 	printf("Josemi's MemCleaner\n");
 
 	// To prevent OS malfunctioning, it will only clean the 90% of the memory
 	// available
-	unsigned long long avail = 10 * getMem() / 9;
-	unsigned long long memToClean;
-
-	if (argc == 2) {
+	double avail = (float) getMem();
+	
+	if (argc > 1) {
 		if (argv[1][0] == '-') {
 			switch (argv[1][1]) {
-				case 'f':
-					break;
-				
-				case 'h':
-				default:
-					printUsage();
-			}		
-		} else {
-			memToClean = atoll(argv[1]);
-			if (memToClean == 0) {
-				printUsage();
+			
+			// Clean a determined percentage of memory
+			case 'p': {
+				int perc = atoi(argv[1] + 3);
+
+				if (perc < 1 || perc > 100) {
+					printf("%i is an invalid percentage.\n", perc);
+					printUsage(argv);
+					exit(-1);
+				} else {
+					printf("%i%% of the memory will be cleaned.\n\n", perc);
+					exitCode = freeMem(avail / 100.0 * ((double)perc));
+					if (exitCode != 0) {
+						printf("Warning: The program was not available to clean all the memory requested.\n");
+					}
+				}
+
+				break;
 			}
 
-			if (memToClean > avail) {
-				freeMem(avail);
-			} else {
-				freeMem(memToClean);
+			// Only shows free memory (already done previously)
+			case 'f':
+				break;
+
+			// Show help
+			case 'h':
+				exitCode = 0;
+
+			default:
+				printUsage(argv);
 			}
+		} else {
+			printUsage(argv);
 		}
 	} else {
-		printf("No options selected.\
-				90%% of the available memory will be cleaned\n");
-		freeMem(avail);
+		printf("No options selected.\n\n80%% of the available memory will be cleaned\n\n");
+		exitCode = freeMem(avail*0.8);
 	}
 
-	return 0;
+	system("pause");
+
+	return exitCode;
 }	// int main()
 
 void printUsage(char **argv) {
-	printf("Usage: %s <Mem. to free in KB>\
-			Use %s -h to show this help.
-			Use %s -f to get the free memory available.\n", argv[1], argv[1]);
+	printf("\nUsage: %s -p <percentage from 1 to 100 of memory to clean>\n"
+		"Use %s -h to show this help.\n"
+		"Use %s -f to get the free memory available.\n\n", argv[0], argv[0], argv[0]);
 }	// void printUsage()
 
 unsigned long long getMem() {
@@ -70,32 +85,38 @@ unsigned long long getMem() {
 	return phys;
 }	// unsigned long long getMem()
 
-void freeMem(unsigned long long memInKB);
-{
-	void** ptr;
-	unsigned long long index;
-	
-	printf("\n%I64d KB of memory will be cleaned up\n", memInKB);
+char freeMem(double fpMemInKB) {
+	size_t index, memInKB = ((size_t) fpMemInKB);
+	char** ptr = NULL;
+	char ret = 0;
+	printf("\n%zu KB of the available memory will be cleaned up\n", memInKB);
 	printf("Occupying  memory...\n");
 
-	ptr = calloc(memInKB, sizeof(void*));
+	ptr = (char**) calloc(memInKB, sizeof(char*));
 
-	for (index = 0; index < memInKB; index++) {
-		ptr[index] = calloc(KB_TO_B, sizeof(char));
+	if (ptr) {
+		for (index = 0; index < memInKB; index++) {
+			ptr[index] = calloc(KB_TO_B, sizeof(char));
 
-		// When there isn't available memory, the pointer returned is null. In
-		// this case memory allocation must stop to start freeing memory.
-		if ( !(ptr[index]) ) {
-			memInKB = index;
-			break;
+			// When there isn't available memory, the pointer returned is null. In
+			// this case memory allocation must stop to start freeing memory.
+			if (!(ptr[index])) {
+				memInKB = index;
+				ret = -1;
+				break;
+			}
 		}
+
+		printf("Freeing memory...\n");
+
+		for (index = 0; index < memInKB; index++) {
+			free(ptr[index]);
+		}
+
+		free(ptr);
+	} else {
+		ret = -1;
 	}
-
-	printf("Freeing memory...\n");
-
-	for (index = 0; index < memInKB; index++) {
-		free(ptr[index]);
-	}
-
-	free(ptr);
+	
+	return ret;
 }

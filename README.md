@@ -1,7 +1,10 @@
 # Josemi's Memory Cleaner
 ## About this:
 This software have an easy way to free memory in Windows systems.
-This memory cleaner works allocating all non-used memory in the system to occupy all "pending" memory, after that, it frees all the allocated memory to let it completely free, not "half-free, half-pending-to-free". The last version of the program check your physical free memory on your computer to do the cleaning automatically without any 
+
+It works allocating all non-used memory in the system to occupy all "pending" memory, after that it frees all the allocated memory to let it completely free, not "half-free, half-pending-to-free" as Windows usually handle it.
+
+The last version of the program check your physical free memory on your computer to do the cleaning automatically without any stability issue.
 
 ## UPDATE 1
 * Some bugs found in the code are solved.
@@ -19,10 +22,10 @@ Here are binaries and code downloads:
 * Download 64-bit binary (Recommended): [MemCleaner64.exe](https://github.com/josemirm/MemoryCleaner/raw/master/MemCleaner64.exe)
 * Download 32-bit binary: [MemCleaner32.exe](https://github.com/josemirm/MemoryCleaner/raw/master/MemCleaner32.exe)
 
-Do not use the old version: It will try to get all your system memory and make it unstable.
+Do not use the versions in the "OldVersions" folder: It will try to get all your system memory and make it unstable. Use it at your own risk.
 
 ## What happens on non-Windows machines:
-This program is completely targeted to Windows machines, in other OS the memory management works different and have diffent problems and solutions.
+This program is completely targeted to Windows machines, in other OS the memory management works different and have diffent problems and solutions. Also, it uses non-portable Windows functions unavailable in other OS.
 
 ## License:
 

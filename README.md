@@ -2,26 +2,27 @@
 ## About this:
 This software have an easy way to free memory in Windows systems.
 This memory cleaner works allocating all non-used memory in the system to occupy all "pending" memory, after that, it frees all the allocated memory to let it completely free, not "half-free, half-pending-to-free". The last version of the program check your physical free memory on your computer to do the cleaning automatically without any 
-* Do not use the old version: If you haven't any virtual memory assigned to your system, you can use the infinite memory allocation (t wouldn't allocate more memory than you have), otherwise with a virtual memory file/partition, it will fill both physical and virtual memory making your computer totally unstable.
 
 ## UPDATE 1
 * Some bugs found in the code are solved.
 * Changed the default percentage of used memory from 90% to 80% to resolve stability issues.
 * Changes in the arguments. Now you set a percentage to clean instead a fixed value of kilobytes.
+* Added a check to 32-bit version users to advise them to use the 64-bit version when there are more than 2 GB of RAM to clean.
+* Refactored the code and the "Read Me" file.
 
 ## Using the software:
-There are compiled binaries to use in 32-bit and 64-bit Windows machines in addition to the single ~~C++~~ C source file. If you have less than 4 GB of RAM you could use both, but if you use the 32-bit version in a 64-bit machine it will NOT work properly.
-It's under 200 lines of code. Simple but powerful.
+There are compiled binaries to use Windows machines in addition to the single C source file. If you have less than 4 GB of RAM you could use both, but if you use the 32-bit version in a 64-bit machine it will not work properly.
+
 Here are binaries and code downloads:
 
 * Download source code: [MemCleaner.c](https://github.com/josemirm/MemoryCleaner/raw/master/MemCleaner.c)
 * Download 64-bit binary (Recommended): [MemCleaner64.exe](https://github.com/josemirm/MemoryCleaner/raw/master/MemCleaner64.exe)
 * Download 32-bit binary: [MemCleaner32.exe](https://github.com/josemirm/MemoryCleaner/raw/master/MemCleaner32.exe)
 
+Do not use the old version: It will try to get all your system memory and make it unstable.
+
 ## What happens on non-Windows machines:
-This program is completely targeted to Windows machines, in other OS the memory management works different and have diffent problems and solutions to the shown here.
-At first, the source code will only compile in Windows with Microsoft C/C++ Compiler, or other compiler with full windows headers and libraries support, that exclude for example GCC, that uses MINGW or MSYS Unix emulation to work (and doesn't have full libraries support). That's let the new code without any non-Windows support, but in Windows is totally needed the Windows exclusive "GlobalMemoryStatusEx" function in order to know different system memory stats (physica, free, used, etc.).
-To use on non-Windows machines you could use the older version at your own risk. It does the same but in a more manual way, having to write in the arguments how many MB you want to clean (e.g., "MemCleaner32.exe 1024").
+This program is completely targeted to Windows machines, in other OS the memory management works different and have diffent problems and solutions.
 
 ## License:
 

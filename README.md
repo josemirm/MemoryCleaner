@@ -19,8 +19,8 @@ There are compiled binaries to use Windows machines in addition to the single C 
 Here are binaries and code downloads:
 
 * Download source code: [MemCleaner.c](https://github.com/josemirm/MemoryCleaner/raw/master/MemCleaner.c)
-* Download 64-bit binary (Recommended): [MemCleaner64.exe](https://github.com/josemirm/MemoryCleaner/raw/master/MemCleaner64.exe)
-* Download 32-bit binary: [MemCleaner32.exe](https://github.com/josemirm/MemoryCleaner/raw/master/MemCleaner32.exe)
+* Download 64-bit binary (Recommended): [MemCleaner64.exe](https://github.com/josemirm/MemoryCleaner/releases/download/v1.1/MemCleaner64.exe)
+* Download 32-bit binary: [MemCleaner32.exe](https://github.com/josemirm/MemoryCleaner/releases/download/v1.1/MemCleaner32.exe)
 
 Do not use the versions in the "OldVersions" folder: It will try to get all your system memory and make it unstable. Use it at your own risk.
 

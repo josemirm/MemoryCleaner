@@ -24,24 +24,24 @@ int main(int argc, char **argv) {
 
 	// Only compile these lines if the machine is a 32-bit one
 #if _WIN32 || _WIN64
-#if !_WIN64
-	const double MAX_4GB_IN_KB = (double)((uint32_t)-1);
-	if (avail > MAX_4GB_IN_KB) {
-		printf("\nWARNING: For this amount of memory you should be using the 64-bit version of this program\n");
-			   
-		char cont = 0;
-		do {
-			printf("Do you want to continue? (y/n): ");
-			fflush(stdout);
-			cont = tolower(getchar());
-			char other = getchar(); // This is to remove the '\n' after entering the key	
-		} while (cont != 'n' && cont != 'y');
+	#if !_WIN64
+		const double MAX_4GB_IN_KB = (double)((uint32_t)-1);
+		if (avail > MAX_4GB_IN_KB) {
+			printf("\nWARNING: For this amount of memory you should be using the 64-bit version of this program\n");
 
-		if (cont == 'n') {
-			return 0;
+			char cont = 0;
+			do {
+				printf("Do you want to continue? (y/n): ");
+				fflush(stdout);
+				cont = tolower(getchar());
+				char other = getchar(); // This is to remove the '\n' after entering the key	
+			} while (cont != 'n' && cont != 'y');
+
+			if (cont == 'n') {
+				return 0;
+			}
 		}
-	}
-#endif
+	#endif
 #endif
 	
 	if (argc > 1) {
@@ -69,6 +69,7 @@ int main(int argc, char **argv) {
 
 			// Only shows free memory (already done previously)
 			case 'f':
+				exitCode = 0;
 				break;
 
 			// Show help

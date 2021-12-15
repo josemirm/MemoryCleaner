@@ -6,12 +6,18 @@ It works allocating all non-used memory in the system to occupy all "pending" me
 
 The last version of the program check your physical free memory on your computer to do the cleaning automatically without any stability issue.
 
-## UPDATE 1
+## Update  1
 * Some bugs found in the code are solved.
 * Changed the default percentage of used memory from 90% to 80% to resolve stability issues.
 * Changes in the arguments. Now you set a percentage to clean instead a fixed value of kilobytes.
 * Added a check to 32-bit version users to advise them to use the 64-bit version when there are more than 2 GB of RAM to clean.
 * Refactored the code and the "Read Me" file.
+
+## Update 2
+
+- Bugs fixed and refactored some parts
+- Now the releases are compiled with with debugging symbols, and the debugging files are attached to the executable.
+- Changed how memory are allocated. Now does it in bigger chunks.
 
 ## Using the software:
 There are compiled binaries to use Windows machines in addition to the single C source file. If you have less than 4 GB of RAM you could use both, but if you use the 32-bit version in a 64-bit machine it will not work properly.
@@ -19,8 +25,8 @@ There are compiled binaries to use Windows machines in addition to the single C 
 Here are binaries and code downloads:
 
 * Download source code: [MemCleaner.c](https://github.com/josemirm/MemoryCleaner/raw/master/MemCleaner.c)
-* Download 64-bit binary (Recommended): [MemCleaner64.exe](https://github.com/josemirm/MemoryCleaner/releases/download/v1.1/MemCleaner64.exe)
-* Download 32-bit binary: [MemCleaner32.exe](https://github.com/josemirm/MemoryCleaner/releases/download/v1.1/MemCleaner32.exe)
+* Download 64-bit version (Recommended): [MemCleaner64.v1.2.zip](https://github.com/josemirm/MemoryCleaner/releases/download/v1.2/MemCleaner64.v1.2.zip)
+* Download 32-bit version: [MemCleaner32.v1.2.zip](https://github.com/josemirm/MemoryCleaner/releases/download/v1.2/MemCleaner32.v1.2.zip)
 
 Do not use the versions in the "OldVersions" folder: It will try to get all your system memory and make it unstable. Use it at your own risk.
 

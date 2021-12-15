@@ -4,12 +4,15 @@
 #include <Windows.h>
 
 
-#define KB_TO_B 1024
+#define CHUNKS 8
+#define B_TO_KB(b) (b/1024)
 
+typedef unsigned long long ULL;
 
-unsigned long long getMem();
-char cleanMem(double fpMemInKB);
+ULL getMem(void);
+char cleanMem(ULL freeMemInB);
 void printUsage(char **argv);
+
 
 
 // Main function
@@ -18,14 +21,11 @@ int main(int argc, char **argv) {
 	printf("Josemi's MemCleaner\n"
 		   "https://github.com/josemirm/MemoryCleaner\n");
 
-	// To prevent OS malfunctioning, it will only clean the 90% of the memory
-	// available
-	double avail = (float) getMem();
+	ULL avail = getMem();
 
 	// Only compile these lines if the machine is a 32-bit one
-#if _WIN32 || _WIN64
-	#if !_WIN64
-		const double MAX_4GB_IN_KB = (double)((uint32_t)-1);
+	#ifndef _WIN64
+		const ULL MAX_4GB_IN_KB = (uint32_t) -1;
 		if (avail > MAX_4GB_IN_KB) {
 			printf("\nWARNING: For this amount of memory you should be using the 64-bit version of this program\n");
 
@@ -34,7 +34,7 @@ int main(int argc, char **argv) {
 				printf("Do you want to continue? (y/n): ");
 				fflush(stdout);
 				cont = tolower(getchar());
-				char other = getchar(); // This is to remove the '\n' after entering the key	
+				getchar(); // This is to remove the '\n' after entering the key
 			} while (cont != 'n' && cont != 'y');
 
 			if (cont == 'n') {
@@ -42,12 +42,11 @@ int main(int argc, char **argv) {
 			}
 		}
 	#endif
-#endif
-	
+
 	if (argc > 1) {
 		if (argv[1][0] == '-') {
 			switch (argv[1][1]) {
-			
+
 			// Clean a determined percentage of memory
 			case 'p': {
 				int perc = atoi(argv[1] + 3);
@@ -58,7 +57,9 @@ int main(int argc, char **argv) {
 					exit(-1);
 				} else {
 					printf("%i%% of the memory will be cleaned.\n\n", perc);
-					exitCode = cleanMem(avail / 100.0 * ((double)perc));
+					avail /= 100;
+					avail *= perc;
+					exitCode = cleanMem(avail);
 					if (exitCode != 0) {
 						printf("Warning: The program was not available to clean all the memory requested.\n");
 					}
@@ -84,7 +85,9 @@ int main(int argc, char **argv) {
 		}
 	} else {
 		printf("No options selected.\n\n80%% of the available memory will be cleaned\n\n");
-		exitCode = cleanMem(avail*0.8);
+		avail /= 10;
+		avail *= 8;
+		exitCode = cleanMem(avail);
 	}
 
 	return exitCode;
@@ -100,55 +103,71 @@ void printUsage(char **argv) {
 
 
 // Returns the amount of free memory and prints it on screen
-unsigned long long getMem() {
-	unsigned long long phys;
+ULL getMem(void) {
+	ULL phys;
 	MEMORYSTATUSEX mem;
 
 	mem.dwLength = sizeof(mem);
 	GlobalMemoryStatusEx(&mem);
-	
+
 	printf("\nPhysical memory used (percentage): %ld%%\n", mem.dwMemoryLoad);
-	
-	phys = (mem.ullAvailPhys/KB_TO_B);
-	printf("Physical memory available: \t%I64d KB\n", phys);
-	
+
+	phys = mem.ullAvailPhys;
+	printf("Physical memory available: \t%llu KB\n", B_TO_KB(phys));
+
 	return phys;
 }	// unsigned long long getMem()
 
 
 // Clean the given amount of memory
-char cleanMem(double fpMemInKB) {
-	size_t index, memInKB = ((size_t) fpMemInKB);
-	char** ptr = NULL;
-	char ret = -1;
-	printf("\n%zu KB of the available memory will be cleaned up\n", memInKB);
+char cleanMem(ULL freeMem) {
+	if (freeMem < 1) {
+		fprintf(stderr, "\n 0 KB available. No memory to clean\n");
+		return -1;
+	}
+
+	char ret = 0;
+
+	printf("\n%llu KB of the available memory will be cleaned up\n", B_TO_KB(freeMem));
 	printf("Occupying  memory...\n");
 
-	ptr = (char**) calloc(memInKB, sizeof(char*));
-
+	// The amount of memory to use would be divided in chunks
+	char** ptr = (char**) calloc(CHUNKS, sizeof(char*));
 	if (ptr) {
-		for (index = 0; index < memInKB; index++) {
-			ptr[index] = calloc(KB_TO_B, sizeof(char));
+		ULL chunkSize = freeMem / CHUNKS;
+		int i;
+		for (i = 0; i < CHUNKS; ++i) {
+			ptr[i] = calloc(1, chunkSize);
 
 			// When there isn't available memory, the pointer returned is null. In
 			// this case memory allocation must stop to start freeing memory.
-			if (!(ptr[index])) {
-				memInKB = index;
+			if ( !(ptr[i]) ) {
 				ret = -1;
+				fprintf(stderr, "Error: Only allocated %llu KB of RAM", chunkSize * i);
 				break;
 			}
+
+			// Accessing some part of the memory, so the compiler won't optimize it
+			ptr[i][chunkSize - 1] = 0xFF;
 		}
+
+		// This is to being able to watch the process in the Resourse Monitor
+		Sleep(1000);
 
 		printf("Freeing memory...\n");
 
-		for (index = 0; index < memInKB; index++) {
-			free(ptr[index]);
+		// If this try to free a non allocated part of memory (that would have 0x0 value due to
+		// using "calloc") it won't have any kind of problem. Trying to free a null pointer have
+		// no effect.
+		for (i=0; i < CHUNKS; ++i) {
+			free(ptr[i]);
 		}
 
 		free(ptr);
-	
-		ret = 0;
+	} else {
+		fprintf(stderr, "Error allocating %llu KB of memory\n", B_TO_KB(freeMem));
+		return -1;
 	}
-	
+
 	return ret;
 }
